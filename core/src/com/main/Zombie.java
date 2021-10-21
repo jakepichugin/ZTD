@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Zombie {
-    int x, y, w, h, speed;
+    int x, y, w, h, speed, hp;
     String type;
+    boolean active = true;
 
     // ANIMATION VARIABLES
     int rows, cols;
@@ -23,11 +25,12 @@ public class Zombie {
         this. x = x;
         this. y = y;
         this.speed = speed;
+        hp = 5;
 
         rows = 1;
         cols = 4;
-        w = Resources.zombie.getWidth() / cols;
-        h = Resources.zombie.getHeight() / rows;
+        w = Tables.zombie_resources.get(type) == null ? Resources.zombie.getWidth() / cols : Tables.zombie_resources.get(type).getWidth() / cols;
+        h = Tables.zombie_resources.get(type) == null ? Resources.zombie.getHeight() / rows : Tables.zombie_resources.get(type).getHeight() / rows;
         init_animation();
     }
 
@@ -40,11 +43,13 @@ public class Zombie {
 
     void update(){
         x -= speed;
+        active = x + w > 0 && hp > 0;
     }
 
     void init_animation(){
         // split texture in individual cells
-        TextureRegion[][] sheet = TextureRegion.split(Resources.zombie, Resources.zombie.getWidth() / cols, Resources.zombie.getHeight() / rows);
+        TextureRegion[][] sheet =
+                TextureRegion.split(Tables.zombie_resources.get(type) == null ? Resources.zombie : Tables.zombie_resources.get(type), w, h);
 
         // init numbers of frames to maximum number possible
         frames = new TextureRegion[rows * cols];
@@ -57,4 +62,6 @@ public class Zombie {
         //init the animation object
         anim = new Animation(frame_time, frames);
     }
+    Rectangle gethitbox(){ return new Rectangle( x, y, w, h);}
+
 }
