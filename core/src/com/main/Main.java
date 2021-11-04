@@ -16,7 +16,8 @@ public class Main extends ApplicationAdapter {
 	Cannon cannon;
 	Button button;
 	Random r;
-
+	String builtTipe;
+	String current_type = "ccc";
 	// CONTROL VARIABLES
 
 	// GAME LISTS
@@ -40,6 +41,7 @@ public class Main extends ApplicationAdapter {
 		update();
 		batch.begin();
 		batch.draw(Resources.bg, 0, 0);
+		UI.draw(batch);
 //		zombie.draw(batch);
 		for (Zombie z : zombies) z.draw(batch);
 		for (Cannon b : cannons) b.draw(batch);
@@ -66,10 +68,30 @@ public class Main extends ApplicationAdapter {
 		if (Gdx.input.justTouched()){
 			int x = Gdx.input.getX(), y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
+
+			for(Button b : buttons) if(b.gethitbox().contains(x, y)) {
+				if (b.locked) b.locked = false;
+				else {
+						builtTipe = b.type;
+						deselect();
+						b.selected = true;
+						current_type = b.type;
+				}
+				return;
+			}
+
+
 			for(Cannon c : cannons) if(c.gethitbox().contains( x, y)) return;
-			if(buildable(x,y))cannons.add(new Cannon("super", x, y));
+			if(buildable(x,y)) //if (UI.money >= Tables.balance.get("cost_"+current_type)) {
+				//UI.money -= Tables.balance.get("cost_"+current_type);
+				cannons.add(new Cannon(builtTipe, x, y));
+			//}
 
 		}
+	}
+
+	void deselect() {
+		for(Button b : buttons) b.selected = false;
 	}
 
 	boolean buildable(int x, int y){
@@ -79,11 +101,14 @@ public class Main extends ApplicationAdapter {
 	void setup() {
 		Tables.init();
 		spawn_zombie();
-		for(int i = 0; i < 5; i++){
 
-			buttons.add(new Button( "play", i * 75 + 25, 525));
+			buttons.add(new Button( "cannon",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "double",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "super",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "fire",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "laser",  buttons.size()* 75 + 200, 525));
 
-		}
+
 	}
 
 	void removing_assets() {
@@ -93,14 +118,32 @@ public class Main extends ApplicationAdapter {
 
 	void spawn_zombie() {
 		if (!zombies.isEmpty()) return;
-		for(int i = 0; i < 15; i++) {
-			zombies.add(zombie = new Zombie("zombie", 1024 + i * 50, r.nextInt(450), 1));
+		UI.wave++;
+		for(int i = 0; i < 5 * UI.wave; i++) {
+
+
+
+			switch(r.nextInt(10)){
+				case 0: case 1: case 2: case 7:
+					zombies.add(zombie = new Zombie("zombie", 1024 + i * 50, r.nextInt(450)));
+					break;
+				case 3: case 4:
+					zombies.add(zombie = new Zombie("fast", 1024 + i * 50, r.nextInt(450)));
+					break;
+				case 5:
+					zombies.add(zombie = new Zombie("riot", 1024 + i * 50, r.nextInt(450)));
+					break;
+				default:
+					zombies.add(zombie = new Zombie("dif", 1024 + i * 50, r.nextInt(450)));
+					break;
+				case 8:
+					zombies.add(zombie = new Zombie("speedy", 1024 + i * 50, r.nextInt(450)));
+					break;
+			}
 
 
 		}
 	}
-
-
 
 
 	// END OF FILE DON'T ADD BELOW

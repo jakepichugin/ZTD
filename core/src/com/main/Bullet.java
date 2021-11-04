@@ -16,11 +16,10 @@ public class Bullet {
         this.y = y;
         w = Tables.bullet_resources.get(type) == null ? Resources.Bullet.getWidth() : Tables.bullet_resources.get(type).getWidth();
         h = Tables.bullet_resources.get(type) == null ? Resources.Bullet.getHeight() : Tables.bullet_resources.get(type).getHeight();
-        angle = 0f;
         speed =  5;
         dt = 0;
         md = 300;
-        calc_angle();
+        angle = calc_angle();
 
     }
 
@@ -38,12 +37,9 @@ public class Bullet {
 
     Rectangle hitbox(){ return new Rectangle( x, y, w, h);}
 
-    void calc_angle() {
-        if (Main.zombies.isEmpty()) return;
-        float zx = Main.zombies.get(0).x + Main.zombies.get(0).w / 2, zy = Main.zombies.get(0).y + Main.zombies.get(0).h / 2;
-        angle = (float)Math.atan((y - zy)/(x - zx));
-        if(x >= zx) angle += Math.PI;
-
+    float calc_angle() {
+        float zx = Main.zombies.get(0).x + (float)Main.zombies.get(0).w / 2, zy = Main.zombies.get(0).y + (float)Main.zombies.get(0).h / 2;
+        return (float)(Math.atan((y - zy)/(x - zx)) + (x >= zx ? Math.PI : 0));
     }
 
     boolean hitzombie(){
