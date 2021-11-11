@@ -69,25 +69,46 @@ public class Main extends ApplicationAdapter {
 			int x = Gdx.input.getX(), y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
 
-			for(Button b : buttons) if(b.gethitbox().contains(x, y)) {
-				if (b.locked) b.locked = false;
-				else {
+			for(Button b : buttons) {
+
+				if (b.gethitbox().contains(x, y)) {
+
+					if (b.locked) {
+						if (b.t.hidden) {
+							hidtt();
+							b.t.hidden = false;
+						} else {
+							b.locked = false;
+							b.t.hidden = true;
+						}
+
+
+					} else {
 						builtTipe = b.type;
 						deselect();
 						b.selected = true;
 						current_type = b.type;
+					}
+					return;
+				} else {
+					if(b.t.close.gethitbox().contains(x, y) && !b.t.hidden) { hidtt(); return;}
+					if(b.t.gethitbox().contains(x, y) && !b.t.hidden) return;
+					if(!b.t.gethitbox().contains(x, y) && !b.t.hidden) { hidtt(); return;}
+
 				}
-				return;
+
 			}
 
-
 			for(Cannon c : cannons) if(c.gethitbox().contains( x, y)) return;
-			if(buildable(x,y)) //if (UI.money >= Tables.balance.get("cost_"+current_type)) {
-				//UI.money -= Tables.balance.get("cost_"+current_type);
+			if(buildable(x,y)) if (UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
+				UI.money -= Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type);
 				cannons.add(new Cannon(builtTipe, x, y));
-			//}
+			}
 
 		}
+	}
+	void hidtt(){
+		for (Button b : buttons) b.t.hidden = true;
 	}
 
 	void deselect() {
