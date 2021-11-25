@@ -10,6 +10,9 @@ public class Tables {
     static HashMap<String, Texture> zombie_resources = new HashMap<String, Texture>();
     static HashMap<String, Texture> bullet_resources = new HashMap<String, Texture>();
     static HashMap<String, Integer> balance = new HashMap<String, Integer>();
+    static HashMap<String, String> tooltips = new HashMap<String, String>();
+    static HashMap<String, Texture> resources = new HashMap<String, Texture>();
+
 
 
     static void init(){
@@ -34,17 +37,36 @@ public class Tables {
         zombie_resources.put("dif", Resources.zombie_dif);
         zombie_resources.put("speedy", Resources.zombie_speedy);
         zombie_resources.put("riot", Resources.zombie_riot);
+        zombie_resources.put("water", Resources.zombie_water);
+
+        resources.put("effect_click", Resources.click_effect);
+        resources.put("tap_effect", Resources.tap_effect);
+
+        //tool tip info
+        tooltips.put("fire", "Fires high damage bullets at high rate of fire.");
+        tooltips.put("super", "Fires low damage bullets at moderate rate of fire.");
+        tooltips.put("laser", "Fires deadly bullets at an extremely low rate of fire.");
+        tooltips.put("double", "Fires two low damage bullets at a moderate rate of fire.");
+        tooltips.put("mounted", "Spawns a wall with mounted canons.");
+
 
 
         // canon fire delay
         balance.put("delay_fire", 15);
         balance.put("delay_double", 45);
+        balance.put("delay_laser", 85);
 
-        // canon costs
+        // canon placement costs
         balance.put("cost_fire", 50);
         balance.put("cost_double", 30);
         balance.put("cost_super", 40);
         balance.put("cost_laser", 250);
+
+        // unlock costs
+        balance.put("unlock_fire", 300);
+        balance.put("unlock_double", 250);
+        balance.put("unlock_super", 40);
+        balance.put("unlock_laser", 500);
 
         //zombie speeds
         balance.put("speed_fast", 3);
@@ -58,9 +80,11 @@ public class Tables {
         // animation varriable
         balance.put("cols_speedy",6);
         balance.put("cols_laser",16);
+        balance.put("cols_click", 4);
+        balance.put("cols_tap", 9);
 
-        //
-        balance.put("cols_laser",16);
+
+
 
 
     }

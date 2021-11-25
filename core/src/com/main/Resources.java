@@ -39,12 +39,18 @@ public class Resources {
     static Texture zombie_dif = new Texture(Gdx.files.internal("DifZombies.png"));
     static Texture zombie_speedy = new Texture(Gdx.files.internal("speedy_zombie.png"));
     static Texture zombie_riot = new Texture(Gdx.files.internal("riotzombieBIG.png"));
+    static Texture zombie_water = new Texture(Gdx.files.internal("WaterBlob.png"));
 
     // TODO: Bullets
     static Texture Bullet = new Texture(Gdx.files.internal("Bullet.png"));
 
     // TODO: Sounds
     static Sound sfx_bullet = Gdx.audio.newSound(Gdx.files.internal("Bullet.mp3"));
+
+    // TODO: Effets
+    static Texture click_effect = new Texture(Gdx.files.internal("click_effect.png"));
+    static Texture tap_effect = new Texture(Gdx.files.internal("tap_effect_2.png"));
+
 
 
 }

@@ -25,6 +25,7 @@ public class Main extends ApplicationAdapter {
 	static ArrayList<Cannon> cannons = new ArrayList<Cannon>();
 	static ArrayList<Button> buttons = new ArrayList<Button>();
 	static ArrayList<Bullet> bullet = new ArrayList<Bullet>();
+	static ArrayList<Effect> effects  = new ArrayList<>();
 
 
 
@@ -47,6 +48,7 @@ public class Main extends ApplicationAdapter {
 		for (Cannon b : cannons) b.draw(batch);
 		for (Button a : buttons) a.draw(batch);
 		for (Bullet y : bullet) y.draw(batch);
+		for (Effect d : effects) d.draw(batch);
 		batch.end();
 	}
 
@@ -56,7 +58,8 @@ public class Main extends ApplicationAdapter {
 		for(Zombie z : zombies) z.update();
 		for(Cannon b : cannons) b.update();
 		for(Button a : buttons) a.update();
-		for (Bullet y : bullet) y.update();
+		for(Bullet y : bullet) y.update();
+		for(Effect d : effects) d.update();
 
 		removing_assets();
 
@@ -68,9 +71,9 @@ public class Main extends ApplicationAdapter {
 		if (Gdx.input.justTouched()){
 			int x = Gdx.input.getX(), y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
+			effects.add(new Effect("tap", x, y));
 
 			for(Button b : buttons) {
-
 				if (b.gethitbox().contains(x, y)) {
 
 					if (b.locked) {
@@ -84,25 +87,25 @@ public class Main extends ApplicationAdapter {
 
 
 					} else {
-						builtTipe = b.type;
+//						builtTipe = b.type;
 						deselect();
 						b.selected = true;
 						current_type = b.type;
 					}
 					return;
-				} else {
-					if(b.t.close.gethitbox().contains(x, y) && !b.t.hidden) { hidtt(); return;}
-					if(b.t.gethitbox().contains(x, y) && !b.t.hidden) return;
-					if(!b.t.gethitbox().contains(x, y) && !b.t.hidden) { hidtt(); return;}
+				} else if (!b.t.hidden){
+					if(b.t.close.gethitbox().contains(x, y)) { hidtt(); return;}
+					if(b.t.gethitbox().contains(x, y)) return;
+					if(!b.t.gethitbox().contains(x, y)) hidtt();
 
 				}
 
 			}
 
 			for(Cannon c : cannons) if(c.gethitbox().contains( x, y)) return;
-			if(buildable(x,y)) if (UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
+			if(buildableCannon(x,y)) if (UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
 				UI.money -= Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type);
-				cannons.add(new Cannon(builtTipe, x, y));
+				cannons.add(new Cannon(current_type, x, y));
 			}
 
 		}
@@ -115,7 +118,7 @@ public class Main extends ApplicationAdapter {
 		for(Button b : buttons) b.selected = false;
 	}
 
-	boolean buildable(int x, int y){
+	boolean buildableCannon(int x, int y){
 		return (x < 1000 && ((y < 200 || y > 300) && y < 500));
 	}
 
@@ -135,6 +138,10 @@ public class Main extends ApplicationAdapter {
 	void removing_assets() {
 		for (Zombie z : zombies) if (!z.active) { zombies.remove(z); break;}
 		for (Bullet y : bullet) if (!y.active) { bullet.remove(y); break;}
+		for (Effect d : effects) if (!d.active) { effects.remove(d); break;}
+	}
+	boolean buildableWater(int x, int y){
+		return (x < 1000 && !((y < 200 || y > 300) && y < 500));
 	}
 
 	void spawn_zombie() {
@@ -145,7 +152,7 @@ public class Main extends ApplicationAdapter {
 
 
 			switch(r.nextInt(10)){
-				case 0: case 1: case 2: case 7:
+				case 0: case 1:
 					zombies.add(zombie = new Zombie("zombie", 1024 + i * 50, r.nextInt(450)));
 					break;
 				case 3: case 4:
@@ -159,6 +166,9 @@ public class Main extends ApplicationAdapter {
 					break;
 				case 8:
 					zombies.add(zombie = new Zombie("speedy", 1024 + i * 50, r.nextInt(450)));
+					break;
+				case 2: case 7:
+					zombies.add(zombie = new Zombie("water", 1024 + i * 50, r.nextInt(50) + 200));
 					break;
 			}
 

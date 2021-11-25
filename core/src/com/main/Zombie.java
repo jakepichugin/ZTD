@@ -18,7 +18,7 @@ public class Zombie {
     Animation anim;
     TextureRegion[] frames;
     TextureRegion frame;
-    float frame_time = 0.2f;
+    float frame_time = 0.1f;
 
     Zombie(String type, int x, int y) {
         this.type = type;
@@ -29,7 +29,7 @@ public class Zombie {
         mhp = hp;
 
         rows = 1;
-        cols = Tables.balance.get("cols_"+type) == null ? 4 : Tables.balance.get("cols_"+type);;
+        cols = Tables.balance.get("cols_"+type) == null ? 4 : Tables.balance.get("cols_"+type);
         w = Tables.zombie_resources.get(type) == null ? Resources.zombie.getWidth() / cols : Tables.zombie_resources.get(type).getWidth() / cols;
         h = Tables.zombie_resources.get(type) == null ? Resources.zombie.getHeight() / rows : Tables.zombie_resources.get(type).getHeight() / rows;
 
