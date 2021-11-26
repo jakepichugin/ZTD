@@ -21,6 +21,7 @@ public class Tables {
         cannon_resources.put("laser", Resources.cannon_laser);
         cannon_resources.put("double", Resources.cannon_double);
         cannon_resources.put("mounted", Resources.cannon_mounted);
+        cannon_resources.put("water_bucket", Resources.water_bucket);
 
         button_resources.put("fire", Resources.button_cannon_fire);
         button_resources.put("super", Resources.button_cannon_super);
@@ -41,6 +42,7 @@ public class Tables {
 
         resources.put("effect_click", Resources.click_effect);
         resources.put("tap_effect", Resources.tap_effect);
+        resources.put("zombie_death", Resources.zombie_death);
 
         //tool tip info
         tooltips.put("fire", "Fires high damage bullets at high rate of fire.");
@@ -82,6 +84,9 @@ public class Tables {
         balance.put("cols_laser",16);
         balance.put("cols_click", 4);
         balance.put("cols_tap", 9);
+        balance.put("cols_zombie_death", 6);
+//        balance.put("cols _water", 8);
+
 
 
 

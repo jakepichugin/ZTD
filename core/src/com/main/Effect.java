@@ -15,6 +15,7 @@ public class Effect {
     TextureRegion[] frames;
     TextureRegion frame;
     float frame_time = 0.05f;
+    float frame_time_death = 0.001f;
 
     Effect(String type, int x, int y){
         this.type = type;
@@ -28,7 +29,7 @@ public class Effect {
     }
 
     void update(){
-        active = !anim.isAnimationFinished(frame_time);
+        active = !anim.isAnimationFinished(("zombie_death".equals(type)) ? frame_time_death : frame_time );//????????????????????????????
     }
 
     void draw(SpriteBatch batch){
@@ -42,7 +43,7 @@ public class Effect {
     void init_animation(){
         // split texture in individual cells
         TextureRegion[][] sheet =
-                TextureRegion.split((Tables.resources.get(type) == null ? Resources.click_effect : Tables.resources.get(type)), w, h);
+                TextureRegion.split((Tables.resources.get(type) == null ? Resources.tap_effect : Tables.resources.get(type)), w, h);
 
         // init numbers of frames to maximum number possible
         frames = new TextureRegion[rows * cols];

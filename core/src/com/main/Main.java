@@ -136,12 +136,13 @@ public class Main extends ApplicationAdapter {
 	}
 
 	void removing_assets() {
-		for (Zombie z : zombies) if (!z.active) { zombies.remove(z); break;}
+		for (Zombie z : zombies) if (!z.active) {
+			zombies.remove(z);
+			effects.add(new Effect("zombie_death", z.x, z.y));
+			break;
+		}
 		for (Bullet y : bullet) if (!y.active) { bullet.remove(y); break;}
 		for (Effect d : effects) if (!d.active) { effects.remove(d); break;}
-	}
-	boolean buildableWater(int x, int y){
-		return (x < 1000 && !((y < 200 || y > 300) && y < 500));
 	}
 
 	void spawn_zombie() {

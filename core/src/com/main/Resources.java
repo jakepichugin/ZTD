@@ -32,6 +32,7 @@ public class Resources {
     static Texture cannon_double = new Texture(Gdx.files.internal("doubleCannon.png"));
     static Texture cannon_laser = new Texture(Gdx.files.internal("laserCannon.png"));
     static Texture cannon_mounted = new Texture(Gdx.files.internal("mountedCannon.png"));
+    static Texture water_bucket = new Texture(Gdx.files.internal("water-deffence.png"));
 
     // TODO: Zombies
     static Texture zombie = new Texture(Gdx.files.internal("Zombies.png"));
@@ -50,6 +51,7 @@ public class Resources {
     // TODO: Effets
     static Texture click_effect = new Texture(Gdx.files.internal("click_effect.png"));
     static Texture tap_effect = new Texture(Gdx.files.internal("tap_effect_2.png"));
+    static Texture zombie_death = new Texture(Gdx.files.internal("zombie_death-2.png"));
 
 
 
