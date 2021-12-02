@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class Tables {
     static HashMap<String, Texture> cannon_resources = new HashMap<String, Texture>();
+    static HashMap<String, Texture> water_resources = new HashMap<String, Texture>();
     static HashMap<String, Texture> button_resources = new HashMap<String, Texture>();
     static HashMap<String, Texture> zombie_resources = new HashMap<String, Texture>();
     static HashMap<String, Texture> bullet_resources = new HashMap<String, Texture>();
@@ -21,7 +22,8 @@ public class Tables {
         cannon_resources.put("laser", Resources.cannon_laser);
         cannon_resources.put("double", Resources.cannon_double);
         cannon_resources.put("mounted", Resources.cannon_mounted);
-        cannon_resources.put("water_bucket", Resources.water_bucket);
+
+        water_resources.put("bucket", Resources.water_bucket);
 
         button_resources.put("fire", Resources.button_cannon_fire);
         button_resources.put("super", Resources.button_cannon_super);
@@ -43,6 +45,7 @@ public class Tables {
         resources.put("effect_click", Resources.click_effect);
         resources.put("tap_effect", Resources.tap_effect);
         resources.put("zombie_death", Resources.zombie_death);
+        resources.put("bullet_missile", Resources.bullet_missile);
 
         //tool tip info
         tooltips.put("fire", "Fires high damage bullets at high rate of fire.");
@@ -56,19 +59,21 @@ public class Tables {
         // canon fire delay
         balance.put("delay_fire", 15);
         balance.put("delay_double", 45);
-        balance.put("delay_laser", 85);
 
         // canon placement costs
         balance.put("cost_fire", 50);
         balance.put("cost_double", 30);
         balance.put("cost_super", 40);
         balance.put("cost_laser", 250);
+        balance.put("cost_bucket", 1);
 
         // unlock costs
         balance.put("unlock_fire", 300);
         balance.put("unlock_double", 250);
         balance.put("unlock_super", 40);
         balance.put("unlock_laser", 500);
+        balance.put("unlock_bucket", 5);
+
 
         //zombie speeds
         balance.put("speed_fast", 3);
@@ -85,7 +90,7 @@ public class Tables {
         balance.put("cols_click", 4);
         balance.put("cols_tap", 9);
         balance.put("cols_zombie_death", 6);
-//        balance.put("cols _water", 8);
+        balance.put("cols_bucket", 7);
 
 
 

@@ -29,7 +29,7 @@ public class Effect {
     }
 
     void update(){
-        active = !anim.isAnimationFinished(("zombie_death".equals(type)) ? frame_time_death : frame_time );//????????????????????????????
+        active = !anim.isAnimationFinished(frame_time);
     }
 
     void draw(SpriteBatch batch){

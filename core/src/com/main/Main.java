@@ -23,6 +23,7 @@ public class Main extends ApplicationAdapter {
 	// GAME LISTS
 	static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	static ArrayList<Cannon> cannons = new ArrayList<Cannon>();
+	static ArrayList<Water> watery = new ArrayList<Water>();
 	static ArrayList<Button> buttons = new ArrayList<Button>();
 	static ArrayList<Bullet> bullet = new ArrayList<Bullet>();
 	static ArrayList<Effect> effects  = new ArrayList<>();
@@ -46,6 +47,7 @@ public class Main extends ApplicationAdapter {
 //		zombie.draw(batch);
 		for (Zombie z : zombies) z.draw(batch);
 		for (Cannon b : cannons) b.draw(batch);
+		for (Water b : watery) b.draw(batch);
 		for (Button a : buttons) a.draw(batch);
 		for (Bullet y : bullet) y.draw(batch);
 		for (Effect d : effects) d.draw(batch);
@@ -57,6 +59,7 @@ public class Main extends ApplicationAdapter {
 		spawn_zombie();
 		for(Zombie z : zombies) z.update();
 		for(Cannon b : cannons) b.update();
+		for(Water b : watery) b.update();
 		for(Button a : buttons) a.update();
 		for(Bullet y : bullet) y.update();
 		for(Effect d : effects) d.update();
@@ -102,12 +105,22 @@ public class Main extends ApplicationAdapter {
 
 			}
 
-			for(Cannon c : cannons) if(c.gethitbox().contains( x, y)) return;
-			if(buildableCannon(x,y)) if (UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
-				UI.money -= Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type);
-				cannons.add(new Cannon(current_type, x, y));
+			for(Cannon c : cannons) {
+				if(c.gethitbox().contains( x, y)) {
+					return;
+				}
 			}
-
+			if(buildableCannon(x,y)) {
+				if (!current_type.equals("bucket") && UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
+					UI.money -= Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type);
+					cannons.add(new Cannon(current_type, x, y));
+				}
+			}
+			for(Water c : watery) if(c.gethitbox().contains( x, y)) return;
+			if (current_type.equals("bucket") && UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
+				UI.money -= Tables.balance.get("cost_" + current_type) == null ? 10 : Tables.balance.get("cost_" +current_type);
+				watery.add(new Water(current_type, x + 100, y + 125));
+			}
 		}
 	}
 	void hidtt(){
@@ -122,11 +135,14 @@ public class Main extends ApplicationAdapter {
 		return (x < 1000 && ((y < 200 || y > 300) && y < 500));
 	}
 
+
+
 	void setup() {
 		Tables.init();
 		spawn_zombie();
 
 			buttons.add(new Button( "cannon",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "bucket",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "double",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "super",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "fire",  buttons.size()* 75 + 200, 525));
@@ -139,10 +155,12 @@ public class Main extends ApplicationAdapter {
 		for (Zombie z : zombies) if (!z.active) {
 			zombies.remove(z);
 			effects.add(new Effect("zombie_death", z.x, z.y));
+			removing_assets();
 			break;
 		}
 		for (Bullet y : bullet) if (!y.active) { bullet.remove(y); break;}
 		for (Effect d : effects) if (!d.active) { effects.remove(d); break;}
+		for (Water w : watery) if (!w.active) { watery.remove(w); break;}
 	}
 
 	void spawn_zombie() {

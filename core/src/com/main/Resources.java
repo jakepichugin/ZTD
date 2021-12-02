@@ -32,6 +32,7 @@ public class Resources {
     static Texture cannon_double = new Texture(Gdx.files.internal("doubleCannon.png"));
     static Texture cannon_laser = new Texture(Gdx.files.internal("laserCannon.png"));
     static Texture cannon_mounted = new Texture(Gdx.files.internal("mountedCannon.png"));
+
     static Texture water_bucket = new Texture(Gdx.files.internal("water-deffence.png"));
 
     // TODO: Zombies
@@ -44,6 +45,7 @@ public class Resources {
 
     // TODO: Bullets
     static Texture Bullet = new Texture(Gdx.files.internal("Bullet.png"));
+    static Texture bullet_missile = new Texture(Gdx.files.internal("missile.png"));
 
     // TODO: Sounds
     static Sound sfx_bullet = Gdx.audio.newSound(Gdx.files.internal("Bullet.mp3"));
