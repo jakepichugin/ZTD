@@ -19,6 +19,7 @@ public class Main extends ApplicationAdapter {
 	String builtTipe;
 	String current_type = "ccc";
 	// CONTROL VARIABLES
+	boolean paused = false;
 
 	// GAME LISTS
 	static ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -56,12 +57,16 @@ public class Main extends ApplicationAdapter {
 
 	void update(){
 		tap();
+
+		if (!paused) {
+			for(Bullet y : bullet) y.update();
+			for(Zombie z : zombies) z.update();
+			for(Cannon b : cannons) b.update();
+
+		}
 		spawn_zombie();
-		for(Zombie z : zombies) z.update();
-		for(Cannon b : cannons) b.update();
-		for(Water b : watery) b.update();
 		for(Button a : buttons) a.update();
-		for(Bullet y : bullet) y.update();
+		for(Water b : watery) b.update();
 		for(Effect d : effects) d.update();
 
 		removing_assets();
@@ -78,6 +83,14 @@ public class Main extends ApplicationAdapter {
 
 			for(Button b : buttons) {
 				if (b.gethitbox().contains(x, y)) {
+					if(b.type.equals("pause") || b.type.equals("play")) {
+
+							System.out.println("CLICKED PAUSE ");
+							paused = !paused;
+							b.type = paused ? "play":"pause";
+
+						return;
+					}
 
 					if (b.locked) {
 						if (b.t.hidden) {
@@ -117,9 +130,12 @@ public class Main extends ApplicationAdapter {
 				}
 			}
 			for(Water c : watery) if(c.gethitbox().contains( x, y)) return;
-			if (current_type.equals("bucket") && UI.money >= (Tables.balance.get("cost_"+current_type) == null ? 10 : Tables.balance.get("cost_"+current_type))) {
-				UI.money -= Tables.balance.get("cost_" + current_type) == null ? 10 : Tables.balance.get("cost_" +current_type);
-				watery.add(new Water(current_type, x + 100, y + 125));
+
+			if (buildableWaterCannon(x,y)) {
+				if (current_type.equals("bucket") && UI.money >= (Tables.balance.get("cost_" + current_type) == null ? 10 : Tables.balance.get("cost_" + current_type))) {
+					UI.money -= Tables.balance.get("cost_" + current_type) == null ? 10 : Tables.balance.get("cost_" + current_type);
+					watery.add(new Water(current_type, x , y ));
+				}
 			}
 		}
 	}
@@ -134,6 +150,9 @@ public class Main extends ApplicationAdapter {
 	boolean buildableCannon(int x, int y){
 		return (x < 1000 && ((y < 200 || y > 300) && y < 500));
 	}
+	boolean buildableWaterCannon(int x, int y){
+		return (x < 1000 && (!(y < 200 || y > 300) && (y < 500)));
+	}
 
 
 
@@ -142,11 +161,18 @@ public class Main extends ApplicationAdapter {
 		spawn_zombie();
 
 			buttons.add(new Button( "cannon",  buttons.size()* 75 + 200, 525));
+			buttons.get(buttons.size() - 1).locked = false;
+			buttons.get(buttons.size() - 1).selected = true;
 			buttons.add(new Button( "bucket",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "double",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "super",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "fire",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "laser",  buttons.size()* 75 + 200, 525));
+
+			//pause button
+			buttons.add(new Button("pause", 1025 - 75, 525));
+			buttons.get(buttons.size() - 1).locked = false;
+			buttons.get(buttons.size() - 1).selected = false;
 
 
 	}

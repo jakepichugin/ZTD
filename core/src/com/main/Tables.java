@@ -30,6 +30,7 @@ public class Tables {
         button_resources.put("laser", Resources.button_cannon_laser);
         button_resources.put("double", Resources.button_cannon_double);
         button_resources.put("mounted", Resources.button_cannon_mounted);
+        button_resources.put("bucket", Resources.bucket);
         button_resources.put("play", Resources.button_play);
         button_resources.put("pause", Resources.button_pause);
         button_resources.put("start", Resources.button_start);
@@ -46,6 +47,8 @@ public class Tables {
         resources.put("tap_effect", Resources.tap_effect);
         resources.put("zombie_death", Resources.zombie_death);
         resources.put("bullet_missile", Resources.bullet_missile);
+        resources.put("bullet_fire", Resources.firebullet);
+        resources.put("bullet_super", Resources.superbullet);
 
         //tool tip info
         tooltips.put("fire", "Fires high damage bullets at high rate of fire.");

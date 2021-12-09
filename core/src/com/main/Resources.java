@@ -14,6 +14,7 @@ public class Resources {
     static Texture button_cannon_double = new Texture(Gdx.files.internal("doubleCannonIcon.png"));
     static Texture button_cannon_laser = new Texture(Gdx.files.internal("laserCannonIcon.png"));
     static Texture button_cannon_mounted = new Texture(Gdx.files.internal("mountedCannonIcon.png"));
+    static Texture bucket = new Texture(Gdx.files.internal("bucketbutton.png"));
     static Texture button_play = new Texture(Gdx.files.internal("play.png"));
     static Texture button_pause = new Texture(Gdx.files.internal("pause.png"));
     static Texture button_start = new Texture(Gdx.files.internal("startButton.png"));
@@ -46,6 +47,9 @@ public class Resources {
     // TODO: Bullets
     static Texture Bullet = new Texture(Gdx.files.internal("Bullet.png"));
     static Texture bullet_missile = new Texture(Gdx.files.internal("missile.png"));
+    static Texture firebullet = new Texture(Gdx.files.internal("firebullet.png"));
+    static Texture superbullet = new Texture(Gdx.files.internal("superbullet.png"));
+
 
     // TODO: Sounds
     static Sound sfx_bullet = Gdx.audio.newSound(Gdx.files.internal("Bullet.mp3"));

@@ -30,8 +30,8 @@ public class Water {
         w = (Tables.water_resources.get(type) == null ? Resources.water_bucket : Tables.water_resources.get(type)).getWidth() / cols;
         h = (Tables.water_resources.get(type) == null ? Resources.water_bucket : Tables.water_resources.get(type)).getHeight() / rows;
 //        delay = Tables.balance.get("delay_"+type) == null ? 30 : Tables.balance.get("delay_"+type);
-        this.x = gridlock(x - w / 2);
-        this.y = gridlock(y - h / 2);
+        this.x = (int)gridlock(x);
+        this.y = (int)gridlock(y);
         init_animation();
 
 
@@ -73,8 +73,8 @@ public class Water {
         anim = new Animation(frame_time, frames);
     }
 
-    int gridlock(int n) {
-        return ((int)((n + 25) / 50) * 50);
+    float gridlock(int n) {
+        return ((float)((n) / 50) * 50);
     }
 
     Rectangle gethitbox(){ return new Rectangle( x, y, w, h);}
