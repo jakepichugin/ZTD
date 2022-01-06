@@ -7,14 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Cannon {
     Sprite sprite;
     int x, y, w, h;
     int counter = 0, delay;
     String type;
+    int hp;
+    int mhp;
+    boolean active = true;
+
 
     // animation variables
     // ANIMATION VARIABLES
@@ -34,18 +35,28 @@ public class Cannon {
         sprite = new Sprite(Tables.cannon_resources.get(type) == null ? Resources.cannon : Tables.cannon_resources.get(type));
         rows = 1;
         cols = Tables.balance.get("cols_"+type) == null ? 1 : Tables.balance.get("cols_"+type);
+        hp = Tables.balance.get("life_"+type) == null ? 100 : Tables.balance.get("life_"+type);
+        mhp = hp;
         w = (Tables.cannon_resources.get(type) == null ? Resources.cannon : Tables.cannon_resources.get(type)).getWidth() / cols;
         h = (Tables.cannon_resources.get(type) == null ? Resources.cannon : Tables.cannon_resources.get(type)).getHeight() / rows;
         delay = Tables.balance.get("delay_"+type) == null ? 30 : Tables.balance.get("delay_"+type);
         this.x = gridlock(x - w / 2);
         this.y = gridlock(y - h / 2);
         init_animation();
+        frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
+        sprite = new Sprite(frame);
+        sprite.setPosition(this.x, this.y);
+
+
 
 
     }
 
     void draw(SpriteBatch batch) {
         sprite.draw(batch);
+
+        batch.draw(Resources.red_bar, x, y - 5,  w, 5);
+        batch.draw(Resources.green_bar, x, y - 5, ((float)hp / (float)mhp) * w, 5);
     }
 
     void update() {
@@ -57,6 +68,7 @@ public class Cannon {
         sprite = new Sprite(frame);
         sprite.setPosition(this.x, this.y);
         sprite.setRotation(calc_angle());
+        active = hp > 0;
 
 
     }
@@ -90,8 +102,17 @@ public class Cannon {
 
 
     void fire(){
-        Main.bullet.add(new Bullet(type, x + w / 2, y + h / 2 ));
+        if (type.equals("double")){
+            Main.bullets.add(new Bullet(type, x + w / 2, y + h / 4));
+            Resources.sfx_bullet.play(0.1f);
+            Main.bullets.add(new Bullet(type, x + w / 2, y + (h / 4) * 3));
+            Resources.sfx_bullet.play(0.1f);
+            hp--;
+            return;
+        }
+        Main.bullets.add(new Bullet(type, x + w / 2, y + h / 2 ));
         Resources.sfx_bullet.play(0.1f);
+        hp--;
     }
 
     void init_animation(){

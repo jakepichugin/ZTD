@@ -16,7 +16,6 @@ public class Bullet {
         this.type = type;
         this.x = x;
         this.y = y;
-
         sprite = new Sprite(Tables.resources.get("bullet_" + type) == null ? Resources.Bullet : Tables.resources.get("bullet_" + type));
         w = Tables.bullet_resources.get(type) == null ? Resources.Bullet.getWidth() : Tables.bullet_resources.get(type).getWidth();
         h = Tables.bullet_resources.get(type) == null ? Resources.Bullet.getHeight() : Tables.bullet_resources.get(type).getHeight();
@@ -25,7 +24,7 @@ public class Bullet {
         md = 300;
         angle = calc_angle();
         sprite.setPosition(x, y);
-        sprite.setRotation((float)Math.toDegrees(calc_angle()) - 90f);
+        sprite.setRotation((float)Math.toDegrees(calc_angle()) - 0f);
 
     }
 
@@ -37,7 +36,7 @@ public class Bullet {
         x += Math.cos(angle) * speed;
         y += Math.sin(angle) * speed;
         sprite.setPosition(x, y);
-        dt += Math.cos(angle) * speed + Math.sin(angle) * speed;
+        dt += Math.abs(Math.cos(angle)) * speed + Math.abs(Math.sin(angle)) * speed;
         active = dt < md;
         hitzombie();
 
@@ -46,20 +45,26 @@ public class Bullet {
     Rectangle hitbox(){ return new Rectangle( x, y, w, h);}
 
     float calc_angle() {
-        Zombie closest = null;
-        for (Zombie z : Main.zombies){
-            if (closest == null) {
-                closest = z; continue;
-            }
-            float hyp_closest = (float)Math.sqrt(((x - closest.x) * (x - closest.x)) + ((y - closest.y) * (y - closest.y)));
-            float hyp_closest_z = (float)Math.sqrt(((x - z.x) * (x - z.x)) + ((y - z.y) * (y - z.y)));
-            if (hyp_closest > hyp_closest_z) {
-                closest = z;
+        if(!(type == "bucket")) {
+            Zombie closest = null;
+            for (Zombie z : Main.zombies) {
+                if (closest == null) {
+                    closest = z;
+                    continue;
+                }
+                float hyp_closest = (float) Math.sqrt(((x - closest.x) * (x - closest.x)) + ((y - closest.y) * (y - closest.y)));
+                float hyp_closest_z = (float) Math.sqrt(((x - z.x) * (x - z.x)) + ((y - z.y) * (y - z.y)));
+                if (hyp_closest > hyp_closest_z) {
+                    closest = z;
+                }
+
             }
 
+            float zx = closest.x + (float) closest.w / 2, zy = closest.y + (float) closest.h / 2;
+            return (float) (Math.atan((y - zy) / (x - zx)) + (x >= zx ? Math.PI : 0));
         }
-        float zx = closest.x + (float)closest.w / 2, zy = closest.y + (float)closest.h / 2;
-        return (float)(Math.atan((y - zy)/(x - zx)) + (x >= zx ? Math.PI : 0));
+
+        return 0;
     }
 
     boolean hitzombie(){

@@ -14,6 +14,7 @@ public class Resources {
     static Texture button_cannon_double = new Texture(Gdx.files.internal("doubleCannonIcon.png"));
     static Texture button_cannon_laser = new Texture(Gdx.files.internal("laserCannonIcon.png"));
     static Texture button_cannon_mounted = new Texture(Gdx.files.internal("mountedCannonIcon.png"));
+    static Texture button_wall = new Texture(Gdx.files.internal("WallIcon.png"));
     static Texture bucket = new Texture(Gdx.files.internal("bucketbutton.png"));
     static Texture button_play = new Texture(Gdx.files.internal("play.png"));
     static Texture button_pause = new Texture(Gdx.files.internal("pause.png"));
@@ -25,6 +26,7 @@ public class Resources {
     static Texture tooltip_bg = new Texture(Gdx.files.internal("ttbg.png"));
     static Texture red_bar = new Texture(Gdx.files.internal("red_bar.png"));
     static Texture green_bar = new Texture(Gdx.files.internal("green_bar.png"));
+    static Texture wall = new Texture(Gdx.files.internal("Wall.png"));
 
     // TODO: Cannons
     static Texture cannon = new Texture(Gdx.files.internal("Cannon.png"));
@@ -44,11 +46,15 @@ public class Resources {
     static Texture zombie_riot = new Texture(Gdx.files.internal("riotzombieBIG.png"));
     static Texture zombie_water = new Texture(Gdx.files.internal("WaterBlob.png"));
 
+
+
     // TODO: Bullets
     static Texture Bullet = new Texture(Gdx.files.internal("Bullet.png"));
     static Texture bullet_missile = new Texture(Gdx.files.internal("missile.png"));
     static Texture firebullet = new Texture(Gdx.files.internal("firebullet.png"));
     static Texture superbullet = new Texture(Gdx.files.internal("superbullet.png"));
+    static Texture laserbullet = new Texture(Gdx.files.internal("laserbullet.png"));
+    static Texture waterbullet = new Texture(Gdx.files.internal("Bullet.png"));
 
 
     // TODO: Sounds

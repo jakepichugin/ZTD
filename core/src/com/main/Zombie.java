@@ -50,6 +50,9 @@ public class Zombie {
 
     void update(){
         x -= speed;
+        UI.score += hp > 0 ? 0: 1;
+        UI.money += hp > 0 ? 0: 25;
+        UI.life -=  x + w > 0 ? 0: 1;
         active = x + w > 0 && hp > 0;
     }
 

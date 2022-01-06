@@ -2,7 +2,6 @@ package com.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -26,8 +25,9 @@ public class Main extends ApplicationAdapter {
 	static ArrayList<Cannon> cannons = new ArrayList<Cannon>();
 	static ArrayList<Water> watery = new ArrayList<Water>();
 	static ArrayList<Button> buttons = new ArrayList<Button>();
-	static ArrayList<Bullet> bullet = new ArrayList<Bullet>();
+	static ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	static ArrayList<Effect> effects  = new ArrayList<>();
+	static ArrayList<Wall> walls  = new ArrayList<>();
 
 
 
@@ -44,30 +44,34 @@ public class Main extends ApplicationAdapter {
 		update();
 		batch.begin();
 		batch.draw(Resources.bg, 0, 0);
-		UI.draw(batch);
 //		zombie.draw(batch);
 		for (Zombie z : zombies) z.draw(batch);
 		for (Cannon b : cannons) b.draw(batch);
 		for (Water b : watery) b.draw(batch);
+		UI.draw(batch);
 		for (Button a : buttons) a.draw(batch);
-		for (Bullet y : bullet) y.draw(batch);
+		for (Bullet y : bullets) y.draw(batch);
 		for (Effect d : effects) d.draw(batch);
+		for (Wall w : walls) w.draw(batch);
 		batch.end();
 	}
 
 	void update(){
 		tap();
+		spawn_zombie();
 
 		if (!paused) {
-			for(Bullet y : bullet) y.update();
+			for(Bullet y : bullets) y.update();
 			for(Zombie z : zombies) z.update();
 			for(Cannon b : cannons) b.update();
 
+
 		}
-		spawn_zombie();
+
 		for(Button a : buttons) a.update();
 		for(Water b : watery) b.update();
 		for(Effect d : effects) d.update();
+		for(Wall e : walls) e.update();
 
 		removing_assets();
 
@@ -97,8 +101,12 @@ public class Main extends ApplicationAdapter {
 							hidtt();
 							b.t.hidden = false;
 						} else {
+							if(UI.money >= (Tables.balance.get("unlock_"+b.type) == null ? 0 : (Tables.balance.get("unlock_"+b.type))))
+								UI.money -= (Tables.balance.get("unlock_"+b.type) == null ? 0 : (Tables.balance.get("unlock_"+b.type)));
+							else return;
 							b.locked = false;
 							b.t.hidden = true;
+
 						}
 
 
@@ -116,6 +124,10 @@ public class Main extends ApplicationAdapter {
 
 				}
 
+			}
+			if (walls.size() < 3 && (current_type.equals("wall") || current_type.equals("mounted"))) {
+				walls.add(new Wall(x, 0, current_type.equals("mounted")));
+				return;
 			}
 
 			for(Cannon c : cannons) {
@@ -164,10 +176,14 @@ public class Main extends ApplicationAdapter {
 			buttons.get(buttons.size() - 1).locked = false;
 			buttons.get(buttons.size() - 1).selected = true;
 			buttons.add(new Button( "bucket",  buttons.size()* 75 + 200, 525));
-			buttons.add(new Button( "double",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "super",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "fire",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "double",  buttons.size()* 75 + 200, 525));
 			buttons.add(new Button( "laser",  buttons.size()* 75 + 200, 525));
+			buttons.add(new Button( "wall",  buttons.size()* 75 + 200, 525));
+			buttons.get(buttons.size() - 1).locked = false;
+			buttons.get(buttons.size() - 1).selected = false;
+			buttons.add(new Button( "mounted",  buttons.size()* 75 + 200, 525));
 
 			//pause button
 			buttons.add(new Button("pause", 1025 - 75, 525));
@@ -184,9 +200,11 @@ public class Main extends ApplicationAdapter {
 			removing_assets();
 			break;
 		}
-		for (Bullet y : bullet) if (!y.active) { bullet.remove(y); break;}
+		for (Cannon c : cannons) if (c.active == false) {cannons.remove(c); break;}
+		for (Bullet y : bullets) if (!y.active) { bullets.remove(y); break;}
 		for (Effect d : effects) if (!d.active) { effects.remove(d); break;}
 		for (Water w : watery) if (!w.active) { watery.remove(w); break;}
+		for (Wall w : walls) if (!w.active) { walls.remove(w); break;}
 	}
 
 	void spawn_zombie() {

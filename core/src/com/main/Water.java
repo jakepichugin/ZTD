@@ -11,8 +11,11 @@ public class Water {
     Sprite sprite;
     int x, y, w, h;
     int counter = 0, delay;
-    boolean active = true;
     String type;
+    int hp;
+    int mhp;
+    boolean active = true;
+
 
     // animation variables
     // ANIMATION VARIABLES
@@ -20,37 +23,97 @@ public class Water {
     Animation anim;
     TextureRegion[] frames;
     TextureRegion frame;
+    TextureRegion last_frame;
     float frame_time = 0.1f;
+
+
+
+
 
     Water(String type, int x, int y) {
         this.type = type;
         sprite = new Sprite(Tables.water_resources.get(type) == null ? Resources.water_bucket : Tables.water_resources.get(type));
         rows = 1;
         cols = Tables.balance.get("cols_"+type) == null ? 1 : Tables.balance.get("cols_"+type);
+        hp = Tables.balance.get("life_"+type) == null ? 100 : Tables.balance.get("life_"+type);
+        mhp = hp;
         w = (Tables.water_resources.get(type) == null ? Resources.water_bucket : Tables.water_resources.get(type)).getWidth() / cols;
         h = (Tables.water_resources.get(type) == null ? Resources.water_bucket : Tables.water_resources.get(type)).getHeight() / rows;
-//        delay = Tables.balance.get("delay_"+type) == null ? 30 : Tables.balance.get("delay_"+type);
-        this.x = (int)gridlock(x);
-        this.y = (int)gridlock(y);
+        delay = Tables.balance.get("delay_"+type) == null ? 30 : Tables.balance.get("delay_"+type);
+        this.x = gridlock(x);
+        this.y = gridlock(y);
         init_animation();
+        frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
+        sprite = new Sprite(frame);
+        sprite.setPosition(this.x, this.y);
+
+
 
 
     }
+
+
 
     void draw(SpriteBatch batch) {
         sprite.draw(batch);
+
+        batch.draw(Resources.red_bar, x, y - 5,  w, 5);
+        batch.draw(Resources.green_bar, x, y - 5, ((float)hp / (float)mhp) * w, 5);
+    }
+
+    void fire(){
+        Main.bullets.add(new Bullet(type, x, y));
+        Resources.sfx_bullet.play(0.1f);
+        Main.bullets.add(new Bullet(type, x, y + h * 1 / 10));
+        Resources.sfx_bullet.play(0.1f);
+        Main.bullets.add(new Bullet(type, x, y + h * 2 / 10));
+        Resources.sfx_bullet.play(0.1f);
+        Main.bullets.add(new Bullet(type, x, y + h * 3 / 10));
+        Resources.sfx_bullet.play(0.1f);
+        Main.bullets.add(new Bullet(type, x, y + h * 4 / 10));
+        Resources.sfx_bullet.play(0.1f);
+        hp--;
     }
 
     void update() {
-//        if(counter++ > delay) {if (!Main.zombies.isEmpty())  counter = 0;}
+        if(!type.equals("laser") && counter++ > delay) {if (!Main.zombies.isEmpty()) fire(); counter = 0;}
+//        if(type.equals("laser") && check_frame()) if(!Main.zombies.isEmpty()) fire();
+
         frame_time += Gdx.graphics.getDeltaTime();
         frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
         sprite = new Sprite(frame);
         sprite.setPosition(this.x, this.y);
-        active = !anim.isAnimationFinished(frame_time);
+//        sprite.setRotation(calc_angle());
+        active = hp > 0;
 
 
     }
+
+    boolean check_frame(){
+        return (last_frame == (TextureRegion)anim.getKeyFrame(frame_time, true));
+    }
+
+
+
+//    float calc_angle() {
+//
+//        Zombie closest = null;
+//        for (Zombie z : Main.zombies){
+//            if (closest == null) {
+//                closest = z; continue;
+//            }
+//            float hyp_closest = (float)Math.sqrt(((x - closest.x) * (x - closest.x)) + ((y - closest.y) * (y - closest.y)));
+//            float hyp_closest_z = (float)Math.sqrt(((x - z.x) * (x - z.x)) + ((y - z.y) * (y - z.y)));
+//            if (hyp_closest > hyp_closest_z) {
+//                closest = z;
+//            }
+//
+//        }
+//        float zx = closest.x + (float)closest.w / 2, zy = closest.y + (float)closest.h / 2;
+//        return (float)Math.toDegrees(Math.atan((y - zy)/(x - zx)) + (x >= zx ? Math.PI : 0));
+//    }
+
+
 
 
 
@@ -71,13 +134,19 @@ public class Water {
                 frames[index++] = sheet[r][c];
         //init the animation object
         anim = new Animation(frame_time, frames);
+        if(type.equals("laser")) {last_frame = (TextureRegion)anim.getKeyFrames()[anim.getKeyFrames().length - 6];}
+
+
+
     }
 
-    float gridlock(int n) {
-        return ((float)((n) / 50) * 50);
+    int gridlock(int n) {
+        return ((int)((n) / 50) * 50);
     }
 
     Rectangle gethitbox(){ return new Rectangle( x, y, w, h);}
+
+
 
 
 

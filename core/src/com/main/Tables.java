@@ -36,6 +36,7 @@ public class Tables {
         button_resources.put("start", Resources.button_start);
         button_resources.put("exit", Resources.button_exit);
         button_resources.put("close", Resources.button_close);
+        button_resources.put("wall", Resources.button_wall);
 
         zombie_resources.put("fast", Resources.zombie_fast);
         zombie_resources.put("dif", Resources.zombie_dif);
@@ -49,6 +50,9 @@ public class Tables {
         resources.put("bullet_missile", Resources.bullet_missile);
         resources.put("bullet_fire", Resources.firebullet);
         resources.put("bullet_super", Resources.superbullet);
+        resources.put("bullet_laser", Resources.laserbullet);
+        resources.put("bullet_bucket", Resources.waterbullet);
+
 
         //tool tip info
         tooltips.put("fire", "Fires high damage bullets at high rate of fire.");
@@ -64,18 +68,28 @@ public class Tables {
         balance.put("delay_double", 45);
 
         // canon placement costs
-        balance.put("cost_fire", 50);
-        balance.put("cost_double", 30);
+        balance.put("cost_fire", 75);
+        balance.put("cost_double", 100);
         balance.put("cost_super", 40);
         balance.put("cost_laser", 250);
         balance.put("cost_bucket", 1);
 
+        // cannon life
+        balance.put("life_fire", 300);
+        balance.put("life_double",500);
+        balance.put("life_super", 250);
+        balance.put("life_laser", 700);
+        balance.put("life_bucket", 1);
+
         // unlock costs
-        balance.put("unlock_fire", 300);
+        balance.put("unlock_fire", 350);
         balance.put("unlock_double", 250);
         balance.put("unlock_super", 40);
         balance.put("unlock_laser", 500);
         balance.put("unlock_bucket", 5);
+
+        // killed by
+
 
 
         //zombie speeds
