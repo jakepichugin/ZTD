@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Water {
     Sprite sprite;
     int x, y, w, h;
-    int counter = 0, delay;
+    int delay;
     String type;
     int hp;
     int mhp;
@@ -23,7 +23,6 @@ public class Water {
     Animation anim;
     TextureRegion[] frames;
     TextureRegion frame;
-    TextureRegion last_frame;
     float frame_time = 0.1f;
 
 
@@ -46,6 +45,7 @@ public class Water {
         frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
         sprite = new Sprite(frame);
         sprite.setPosition(this.x, this.y);
+        fire();
 
 
 
@@ -57,67 +57,37 @@ public class Water {
     void draw(SpriteBatch batch) {
         sprite.draw(batch);
 
-        batch.draw(Resources.red_bar, x, y - 5,  w, 5);
-        batch.draw(Resources.green_bar, x, y - 5, ((float)hp / (float)mhp) * w, 5);
+
     }
 
     void fire(){
-        Main.bullets.add(new Bullet(type, x, y));
-        Resources.sfx_bullet.play(0.1f);
-        Main.bullets.add(new Bullet(type, x, y + h * 1 / 10));
-        Resources.sfx_bullet.play(0.1f);
-        Main.bullets.add(new Bullet(type, x, y + h * 2 / 10));
-        Resources.sfx_bullet.play(0.1f);
-        Main.bullets.add(new Bullet(type, x, y + h * 3 / 10));
-        Resources.sfx_bullet.play(0.1f);
-        Main.bullets.add(new Bullet(type, x, y + h * 4 / 10));
-        Resources.sfx_bullet.play(0.1f);
-        hp--;
+        Game.bullets.add(new Bullet(type, x, y));
+        Game.bullets.add(new Bullet(type, x, y + h * 1 / 10));
+        Game.bullets.add(new Bullet(type, x, y + h * 2 / 10));
+        Game.bullets.add(new Bullet(type, x, y + h * 3 / 10));
+        Game.bullets.add(new Bullet(type, x, y + h * 4 / 10));
+
     }
 
     void update() {
-        if(!type.equals("laser") && counter++ > delay) {if (!Main.zombies.isEmpty()) fire(); counter = 0;}
-//        if(type.equals("laser") && check_frame()) if(!Main.zombies.isEmpty()) fire();
-
         frame_time += Gdx.graphics.getDeltaTime();
         frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
         sprite = new Sprite(frame);
         sprite.setPosition(this.x, this.y);
-//        sprite.setRotation(calc_angle());
-        active = hp > 0;
+        active = !anim.isAnimationFinished(frame_time);
+        check4blobs();
 
 
     }
 
-    boolean check_frame(){
-        return (last_frame == (TextureRegion)anim.getKeyFrame(frame_time, true));
+    void check4blobs() {
+        if (Game.zombies.isEmpty()) return;
+        for(Zombie z: Game.zombies) {
+            if(gethitbox().contains(z.gethitbox()) && z.type.equals("water")) {
+                z.hp = 0;
+            }
+        }
     }
-
-
-
-//    float calc_angle() {
-//
-//        Zombie closest = null;
-//        for (Zombie z : Main.zombies){
-//            if (closest == null) {
-//                closest = z; continue;
-//            }
-//            float hyp_closest = (float)Math.sqrt(((x - closest.x) * (x - closest.x)) + ((y - closest.y) * (y - closest.y)));
-//            float hyp_closest_z = (float)Math.sqrt(((x - z.x) * (x - z.x)) + ((y - z.y) * (y - z.y)));
-//            if (hyp_closest > hyp_closest_z) {
-//                closest = z;
-//            }
-//
-//        }
-//        float zx = closest.x + (float)closest.w / 2, zy = closest.y + (float)closest.h / 2;
-//        return (float)Math.toDegrees(Math.atan((y - zy)/(x - zx)) + (x >= zx ? Math.PI : 0));
-//    }
-
-
-
-
-
-
 
     void init_animation(){
         // split texture in individual cells
@@ -134,7 +104,6 @@ public class Water {
                 frames[index++] = sheet[r][c];
         //init the animation object
         anim = new Animation(frame_time, frames);
-        if(type.equals("laser")) {last_frame = (TextureRegion)anim.getKeyFrames()[anim.getKeyFrames().length - 6];}
 
 
 

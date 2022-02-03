@@ -74,4 +74,6 @@ public class Zombie {
     }
     Rectangle gethitbox(){ return new Rectangle( x, y, w, h);}
 
+
+
 }

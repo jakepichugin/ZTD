@@ -60,8 +60,8 @@ public class Cannon {
     }
 
     void update() {
-        if(!type.equals("laser") && counter++ > delay) {if (!Main.zombies.isEmpty()) fire(); counter = 0;}
-        if(type.equals("laser") && check_frame()) if(!Main.zombies.isEmpty()) fire();
+        if(!type.equals("laser") && counter++ > delay) {if (!Game.zombies.isEmpty()) fire(); counter = 0;}
+        if(type.equals("laser") && check_frame()) if(!Game.zombies.isEmpty()) fire();
 
         frame_time += Gdx.graphics.getDeltaTime();
         frame = (TextureRegion)anim.getKeyFrame(frame_time, true);
@@ -82,7 +82,8 @@ public class Cannon {
     float calc_angle() {
 
         Zombie closest = null;
-        for (Zombie z : Main.zombies){
+        for (Zombie z : Game.zombies){
+            if (z.type.equals("water")) continue;
             if (closest == null) {
                 closest = z; continue;
             }
@@ -93,6 +94,7 @@ public class Cannon {
             }
 
         }
+                if (closest == null) return 0f;
                float zx = closest.x + (float)closest.w / 2, zy = closest.y + (float)closest.h / 2;
                 return (float)Math.toDegrees(Math.atan((y - zy)/(x - zx)) + (x >= zx ? Math.PI : 0));
     }
@@ -103,14 +105,14 @@ public class Cannon {
 
     void fire(){
         if (type.equals("double")){
-            Main.bullets.add(new Bullet(type, x + w / 2, y + h / 4));
+            Game.bullets.add(new Bullet(type, x + w / 2, y + h / 4));
             Resources.sfx_bullet.play(0.1f);
-            Main.bullets.add(new Bullet(type, x + w / 2, y + (h / 4) * 3));
+            Game.bullets.add(new Bullet(type, x + w / 2, y + (h / 4) * 3));
             Resources.sfx_bullet.play(0.1f);
             hp--;
             return;
         }
-        Main.bullets.add(new Bullet(type, x + w / 2, y + h / 2 ));
+        Game.bullets.add(new Bullet(type, x + w / 2, y + h / 2 ));
         Resources.sfx_bullet.play(0.1f);
         hp--;
     }

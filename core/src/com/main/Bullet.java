@@ -47,7 +47,8 @@ public class Bullet {
     float calc_angle() {
         if(!(type == "bucket")) {
             Zombie closest = null;
-            for (Zombie z : Main.zombies) {
+            for (Zombie z : Game.zombies) {
+                if (z.type.equals("water")) continue;
                 if (closest == null) {
                     closest = z;
                     continue;
@@ -59,7 +60,7 @@ public class Bullet {
                 }
 
             }
-
+            if (closest == null) return 0f;
             float zx = closest.x + (float) closest.w / 2, zy = closest.y + (float) closest.h / 2;
             return (float) (Math.atan((y - zy) / (x - zx)) + (x >= zx ? Math.PI : 0));
         }
@@ -67,15 +68,15 @@ public class Bullet {
         return 0;
     }
 
-    boolean hitzombie(){
-        if (Main.zombies.isEmpty()) return false;
-        for(Zombie z: Main.zombies) {
+    void hitzombie(){
+        if (Game.zombies.isEmpty()) return;
+        for(Zombie z: Game.zombies) {
+            if (z.type.equals("water")) continue;
             if(z.gethitbox().contains(hitbox())) {
                 z.hp--;
                 this.active = false;
             }
          }
-        return false;
     }
 
 }
